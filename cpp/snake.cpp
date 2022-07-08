@@ -84,11 +84,11 @@ void Snake::move()
 	//only run A* if a valid path has not already been found
 	if (!pathfinder->checkPathFound() || pathfinder->checkRepeatSearch())
 	{
-	    if(searchAlgorithm == "AStar")
+		if(searchAlgorithm == "AStar")
             pathfinder->AStar(headX / CELL_WIDTH, headY / CELL_HEIGHT, foodX / CELL_WIDTH, foodY / CELL_HEIGHT); 
-        else if (searchAlgorithm == "BFS")
+		else if (searchAlgorithm == "BFS")
             pathfinder->BFS(headX / CELL_WIDTH, headY / CELL_HEIGHT, foodX / CELL_WIDTH, foodY / CELL_HEIGHT);
-        else if (searchAlgorithm == "DFS")
+		else if (searchAlgorithm == "DFS")
             pathfinder->DFS(headX / CELL_WIDTH, headY / CELL_HEIGHT, foodX / CELL_WIDTH, foodY / CELL_HEIGHT);
 	}
 	

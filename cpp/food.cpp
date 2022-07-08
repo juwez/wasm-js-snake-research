@@ -11,7 +11,7 @@ Food::Food(int x, int y)
 	this->y = y;
 }
 
-void Food::move( vector<Segment*> body)
+void Food::move(vector<Segment*> body)
 {
 
 	int newX, newY;
