@@ -14,7 +14,7 @@ Segment::Segment(int x, int y)
 
 void Segment::move(int newX, int newY)
 {
-	this->x = newX;				//update segment coordinates
+	this->x = newX;
 	this->y = newY;	
 }
 

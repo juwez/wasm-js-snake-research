@@ -1,13 +1,14 @@
 using namespace std;
 #include "pathfinder.h"
+#include "gamesettings.h"
 
 bool compare(Node* lhs, Node* rhs)
 {
 	return (lhs->getTotalCost() > rhs->getTotalCost());
 }
 
-Pathfinder::Pathfinder(Snake* snake) : snake(snake), numRows(480 / 20),
-numCols(640 / 20), pathFound(false)
+Pathfinder::Pathfinder(Snake* snake) : snake(snake), numRows(NUM_ROWS),
+numCols(NUM_COLLS), pathFound(false)
 {
     for (int i = 0; i < numRows; i++)
 	{
@@ -15,7 +16,6 @@ numCols(640 / 20), pathFound(false)
 		for (int j = 0; j < numCols; j++)
 		{
 			Node* tempNode = new Node(j, i);
-			//snake->add(tempNode);	//make nodes visible in the window
 			currentRow.push_back(tempNode);
 		}
 		gameState.push_back(currentRow);
@@ -439,8 +439,8 @@ vector<vector<Node*>> Pathfinder::updateGameState()
 	//set the snake's body as obstacles (ignore the head)
 	for (int i = 1; i < snake->body.size(); i++)
 	{
-		gameState.at(snake->body.at(i)->getY() / 20)
-				 .at(snake->body.at(i)->getX() / 20)->setObstacle(true);
+		gameState.at(snake->body.at(i)->getY() / CELL_HEIGHT)
+				 .at(snake->body.at(i)->getX() / CELL_WIDTH)->setObstacle(true);
 	}
 	return gameState;
 }

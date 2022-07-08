@@ -6,13 +6,10 @@
 class Food
 {
 	private:
-		int x, y;	//food coordinates in the game window
-		int w, h; //needed for SDL_RECT
-	public:
+		int x, y;	public:
 		Food(int x, int y);
 		void renderFood(void);
-		//jump to a random position within bounds specified by max x/y
-		void move(int maxX, int maxY, std::vector<Segment*> body);
+		void move( std::vector<Segment*> body);
 		int getX();
 		int getY();
 

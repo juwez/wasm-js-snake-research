@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include "food.h"
 #include "main.h"
+#include "gamesettings.h"
 using namespace std;
 SDL_Rect food;
 
@@ -10,20 +11,19 @@ Food::Food(int x, int y)
 	this->y = y;
 }
 
-void Food::move(int maxX, int maxY, vector<Segment*> body)
+void Food::move( vector<Segment*> body)
 {
 
-	//jump to a random position within bounds (max x/y)
 	int newX, newY;
 	do
 	{
 		//randomize coordinates as long as they are invalid (blocked by snake body)
-		newX = (rand() % maxX/20)*20;
-		newY = (rand() % maxY/20)*20;
+		newX = (rand() % NUM_COLLS)*CELL_WIDTH;
+		newY = (rand() % NUM_ROWS)*CELL_HEIGHT;
 	} while (!validPositon(newX, newY, body));
 	
 	
-	this->x = newX;				//update segment coordinates
+	this->x = newX;				
 	this->y = newY;
 }
 

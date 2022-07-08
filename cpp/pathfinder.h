@@ -30,7 +30,6 @@ class Pathfinder
 	public:
 		Pathfinder(Snake* snake);
 
-		//~ int heuristic(Node* start, Node* goal);
 		
 		void setSnake(Snake* snake);
 		void setRepeatSearch(bool repeat);
@@ -43,7 +42,6 @@ class Pathfinder
         
 		void printGameState(std::vector<std::vector<Node*>> gameState);
 		void resetPathFlag();
-		//void drawSet(std::vector<Node*> set, Fl_Color color);
 		
 		std::vector<std::vector<Node*>> updateGameState();
 		std::vector<Node*> getNeighbors2(std::vector<std::vector<Node*>> gameState, Node* node);

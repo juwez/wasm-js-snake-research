@@ -1,6 +1,7 @@
 #include "snake.h"
 #include "food.h"
 #include "main.h"
+#include "gamesettings.h"
 
 using namespace std;
 //fix init order
@@ -10,23 +11,18 @@ maxBufferSize(1000),
 screenW(screenW), screenH(screenH),
 searchAlgorithm(searchAlgorithm),
 direction("RIGHT"), dead(false)
-{	/*
-	Fl_Box* bgImage = new Fl_Box(0, 0, 800, 600);
-	bgImage->image(background);
-	*/
-
+{	
     //instantiate pathfinder
     pathfinder = new Pathfinder(this);
 	srand(time(NULL));
 	for (int i = 0; i < numSegments; i++)
 	{
-		Segment* bodySeg = new Segment(x + (20*i), y);
+		Segment* bodySeg = new Segment(x + (CELL_WIDTH*i), y);
 		body.push_back(bodySeg);
 	}
 	
 	food = new Food(0, 0);
-	food->move(SCREEN_WIDTH, SCREEN_HEIGHT, body); //randomize initial food position
-	//draw here
+	food->move(body);
 	
 }
 
@@ -42,7 +38,6 @@ void Snake::addSegment()
 	int tailY = body.back()->getY();
 	
 	Segment* newSeg = new Segment(tailX, tailY);
-	//this->add(newSeg);	//add the segment as a child of the window so it is drawn
 	body.push_back(newSeg);
 	return;
 }
@@ -59,13 +54,12 @@ void Snake::checkCollision()
 	{	
 		if(body.at(i)->getX() == headX && body.at(i)->getY() == headY)
 		{
-			//cout << "hit snake" << endl;
 			this->dead = true;
 		}
 	}
 	if(headX == foodX && headY == foodY)
 	{	//check for food collision
-		food->move(SCREEN_WIDTH, SCREEN_HEIGHT, body);
+		food->move( body);
 		pathfinder->resetPathFlag();
 		this->addSegment();
 		cout << "Snake: ate food (size = "  << body.size() << ")" << endl;
@@ -80,7 +74,6 @@ void Snake::checkCollision()
 
 void Snake::move()
 {
-	//~ pathfinder->printGameState(pathfinder->updateGameState());
 
 	//get head & food pos
 	int headX = body.front()->getX();
@@ -91,13 +84,12 @@ void Snake::move()
 	//only run A* if a valid path has not already been found
 	if (!pathfinder->checkPathFound() || pathfinder->checkRepeatSearch())
 	{
-		//divide by 20 to convert values from pixels to grid coords (gross)
-        if(searchAlgorithm == "AStar")
-            pathfinder->AStar(headX / 20, headY / 20, foodX / 20, foodY / 20); 
+	    if(searchAlgorithm == "AStar")
+            pathfinder->AStar(headX / CELL_WIDTH, headY / CELL_HEIGHT, foodX / CELL_WIDTH, foodY / CELL_HEIGHT); 
         else if (searchAlgorithm == "BFS")
-            pathfinder->BFS(headX / 20, headY / 20, foodX / 20, foodY / 20);
+            pathfinder->BFS(headX / CELL_WIDTH, headY / CELL_HEIGHT, foodX / CELL_WIDTH, foodY / CELL_HEIGHT);
         else if (searchAlgorithm == "DFS")
-            pathfinder->DFS(headX / 20, headY / 20, foodX / 20, foodY / 20);
+            pathfinder->DFS(headX / CELL_WIDTH, headY / CELL_HEIGHT, foodX / CELL_WIDTH, foodY / CELL_HEIGHT);
 	}
 	
 	
@@ -113,22 +105,22 @@ void Snake::move()
 
 	//move head based on current direction
 	if(this->direction == "UP")
-		moveMe->move(headX, headY - 20);
+		moveMe->move(headX, headY - CELL_HEIGHT);
 	else if(this->direction == "DOWN")
-		moveMe->move(headX, headY + 20);
+		moveMe->move(headX, headY + CELL_HEIGHT);
 	else if(this->direction == "LEFT")
-		moveMe->move(headX - 20, headY);
+		moveMe->move(headX - CELL_WIDTH, headY);
 	else
-		moveMe->move(headX + 20, headY);
+		moveMe->move(headX + CELL_WIDTH, headY);
 	//insert the last tail segment as the new head	
 	body.insert(body.begin(), moveMe);
 	SDL_SetRenderDrawColor(getRenderer(), 0, 255, 0, SDL_ALPHA_OPAQUE);
 	// latest body state so draw here 
 	      for (auto x : body){
-			SDL_RenderFillRect(getRenderer(), new SDL_Rect{x->getX(), x->getY(),20,20});
+			SDL_RenderFillRect(getRenderer(), new SDL_Rect{x->getX(), x->getY(),CELL_WIDTH,CELL_HEIGHT});
 		  }	
 		SDL_SetRenderDrawColor(getRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
-	    SDL_RenderFillRect(getRenderer(), new SDL_Rect{food->getX(), food->getY(),20,20});
+	    SDL_RenderFillRect(getRenderer(), new SDL_Rect{food->getX(), food->getY(),CELL_WIDTH,CELL_HEIGHT});
     	SDL_RenderPresent(getRenderer());
 	return;
 }

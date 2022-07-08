@@ -35,13 +35,6 @@ int Node::heuristic(int xGoal, int yGoal)
 {
 	int manhattanDist = (abs(this->x - xGoal) + abs(this->y - yGoal));
 	return manhattanDist;
-    //~ int h1 = abs(this->x - xGoal) + abs(this->y - yGoal);
-
-	//~ int dx = abs(this->x - xGoal);
-	//~ int dy = abs(this->y - yGoal);
-    //~ int h2 = sqrt(pow(dx, 2) + pow(dy, 2));
-	//~ return sqrt(pow(dx, 2) + pow(dy, 2));
-    //~ return (h1 + h2) / 2;
 }
 
 void Node::updateTotalCost(int xGoal, int yGoal)
