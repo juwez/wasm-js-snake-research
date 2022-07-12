@@ -11,7 +11,6 @@ const numCols = 10; // 10 20 40;
 const cellWidth = width / numCols;
 const cellHeight = height / numRows;
 const searchAlgorithm = 'BFS';// DFS AStar
-
 let food;
 let snake = [];
 const buffer = [];
@@ -103,7 +102,6 @@ function constructPath(node) {
 function findpathBFS() {
   let openSet = [snake[0]];
   let closedSet = [];
-  console.log(food.x, food.y, 'snake', snake[0].x, snake[0].y);
   // get head of snake
   while (openSet.length > 0) {
     const currentNode = openSet.shift();
@@ -130,7 +128,6 @@ function findpathDFS() {
   const discoveredSet = [];
   while (stack.length > 0) {
     const currentNode = stack.pop();
-    console.log(currentNode);
     if (food.x === currentNode.x && food.y === currentNode.y) {
     // we found a path
       constructPath(currentNode);
@@ -149,19 +146,39 @@ function findpathDFS() {
     }
   }
 }
-function findpath_AStar() {
-  const openSet = [snake[0]];
-  const closedSet = [];
-
-  // use openset and closeset here
-
+function heuristic(node) {
+  return (Math.abs(node.x - food.x) + Math.abs(node.y - food.y));
 }
-function heuristic() {
-
+function findpathAStar() {
+  let openSet = [snake[0]];
+  let closedSet = [];
+  openSet[0].totalcost = heuristic(snake[0]);
+  // use openset and closeset here
+  while (openSet.length > 0) {
+    // choose node with lowest cost
+    openSet.sort((a, b) => a.totalcost - b.totalcost);
+    let currentNode = openSet.shift();
+    if (food.x === currentNode.x && food.y === currentNode.y) {
+      constructPath(currentNode);
+      return;
+    }
+    closedSet.push(currentNode);
+    const neigbours = getNeighboursBFS(currentNode);
+    neigbours.forEach((currentNeighbor) => {
+      // eslint-disable-next-line max-len
+      if (!(closedSet.some((x) => x.x === currentNeighbor.x && x.y === currentNeighbor.y))) {
+        currentNeighbor.parent = currentNode;
+        currentNeighbor.totalcost = heuristic(currentNeighbor) + 1 + Number(currentNode.totalcost);
+        if (!(openSet.some((x) => x.x === currentNeighbor.x && x.y === currentNeighbor.y))) {
+          openSet.push(currentNeighbor);
+        }
+      }
+    });
+  }
 }
 
 function mainLoop() {
-  findpathDFS();
+  findpathAStar();
   while (buffer.length > 0) {
     moveSnake();
   }
