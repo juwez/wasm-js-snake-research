@@ -1,1 +1,7 @@
 .vscode
+package-lock.json
+package.json
+node_modules
+.eslintrc.yml
+cpp/app.js
+cpp/app.wasm

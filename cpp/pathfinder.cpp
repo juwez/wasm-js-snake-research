@@ -162,7 +162,6 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY)
 
 			currGameState.at(startY).at(startX)->setParent(nullptr); //shitty spaghet code 
 
-			//draw the open and closed sets
 			cout << "done" << endl;
 			
 			//write path directly to snake's input buffer

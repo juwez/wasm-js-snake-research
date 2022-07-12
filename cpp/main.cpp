@@ -35,7 +35,7 @@ bool init(void)
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     running = true;
-    string algorithm = "AStar";
+    string algorithm = "DFS";
 
     game = new Snake(1, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, algorithm);
         
@@ -55,7 +55,7 @@ void main_loop(void)
         cout << "Snake: game over! (size = " << snake->getSize() << ")" << endl;
         snake->getPathfinder()->printStats();
     }
-    SDL_Delay(200);  
+ //   SDL_Delay(200);  
 }
 
 int main()
