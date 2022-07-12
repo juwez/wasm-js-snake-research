@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 // settings
@@ -45,7 +46,7 @@ function moveSnake() {
   ctx.clearRect(0, 0, width, height);
   drawApple();
   drawSnake();
-  console.log(food.x,food.y,snake);
+  console.log(food.x, food.y, snake);
 }
 function checkBounds(row, col) {
   return !(col < 0 || col > numCols - 1 || row < 0 || row > numRows - 1);
@@ -100,8 +101,8 @@ function constructPath(node) {
 }
 
 function findpathBFS() {
-  const openSet = [snake[0]];
-  const closedSet = [];
+  let openSet = [snake[0]];
+  let closedSet = [];
   console.log(food.x, food.y, 'snake', snake[0].x, snake[0].y);
   // get head of snake
   while (openSet.length > 0) {
@@ -125,10 +126,32 @@ function findpathBFS() {
   }
 }
 function findpathDFS() {
-  // use stack here
-
+  const stack = [snake[0]];
+  const discoveredSet = [];
+  while (stack.length > 0) {
+    const currentNode = stack.pop();
+    console.log(currentNode);
+    if (food.x === currentNode.x && food.y === currentNode.y) {
+    // we found a path
+      constructPath(currentNode);
+      return;
+    }
+    if (!(discoveredSet.some((x) => x.x === currentNode.x && x.y === currentNode.y))) {
+      discoveredSet.push(currentNode);
+      const neigbours = getNeighboursBFS(currentNode);
+      neigbours.forEach((currentNeighbor) => {
+        // can only contains it if we already proccessed it
+        stack.push(currentNeighbor);
+        if (currentNeighbor.parent === undefined) {
+          currentNeighbor.parent = currentNode;
+        }
+      });
+    }
+  }
 }
-function findpath_ASTAR() {
+function findpath_AStar() {
+  const openSet = [snake[0]];
+  const closedSet = [];
 
   // use openset and closeset here
 
@@ -138,7 +161,7 @@ function heuristic() {
 }
 
 function mainLoop() {
-  findpathBFS();
+  findpathDFS();
   while (buffer.length > 0) {
     moveSnake();
   }
