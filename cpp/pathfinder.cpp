@@ -435,8 +435,8 @@ vector<vector<Node*>> Pathfinder::updateGameState()
 		}
 	}
 	
-	//set the snake's body as obstacles (ignore the head)
-	for (int i = 1; i < snake->body.size(); i++)
+	//set the snake's body as obstacles
+	for (int i = 0; i < snake->body.size(); i++)
 	{
 		gameState.at(snake->body.at(i)->getY() / CELL_HEIGHT)
 				 .at(snake->body.at(i)->getX() / CELL_WIDTH)->setObstacle(true);

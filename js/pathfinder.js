@@ -33,8 +33,8 @@ function createSnake() {
 }
 function placeFood() {
   food = {
-    x: Math.floor(Math.random() * numCols),
-    y: Math.floor(Math.random() * numRows),
+    x: 6, // Math.floor(Math.random() * numCols),
+    y: 4, // Math.floor(Math.random() * numRows),
   };
   if (isBlocked(food.x, food.y)) {
     placeFood();
@@ -50,22 +50,6 @@ function getNeighboursBFS(node) {
   let neigbours = [];
   const row = node.x;
   const col = node.y;
-  if (checkBounds(row - 1, col) && (!isBlocked(row - 1, col))) {
-    neigbours.push(
-      {
-        x: row - 1,
-        y: col,
-      },
-    );
-  }
-  if (checkBounds(row + 1, col) && (!isBlocked(row + 1, col))) {
-    neigbours.push(
-      {
-        x: row + 1,
-        y: col,
-      },
-    );
-  }
   if (checkBounds(row, col - 1) && (!isBlocked(row, col - 1))) {
     neigbours.push(
       {
@@ -82,6 +66,22 @@ function getNeighboursBFS(node) {
       },
     );
   }
+  if (checkBounds(row - 1, col) && (!isBlocked(row - 1, col))) {
+    neigbours.push(
+      {
+        x: row - 1,
+        y: col,
+      },
+    );
+  }
+  if (checkBounds(row + 1, col) && (!isBlocked(row + 1, col))) {
+    neigbours.push(
+      {
+        x: row + 1,
+        y: col,
+      },
+    );
+  }
   return neigbours;
 }
 function constructPath(node) {
@@ -94,7 +94,6 @@ function constructPath(node) {
 function findpathBFS() {
   let openSet = [snake[0]];
   let closedSet = [];
-  console.log(openSet.length);
   // get head of snake
   while (openSet.length > 0) {
     const currentNode = openSet.shift();
@@ -122,6 +121,7 @@ function findpathDFS() {
   const discoveredSet = [];
   while (stack.length > 0) {
     const currentNode = stack.pop();
+
     if (food.x === currentNode.x && food.y === currentNode.y) {
     // we found a path
       constructPath(currentNode);
@@ -147,12 +147,13 @@ function heuristic(node) {
 function findpathAStar() {
   let openSet = [snake[0]];
   let closedSet = [];
-  openSet[0].totalcost = heuristic(snake[0]);
-  // use openset and closeset here
+  openSet[0].moveCost = 0;
+  openSet[0].totalcost = heuristic(snake[0]) + openSet[0].moveCost;
+
   while (openSet.length > 0) {
     // choose node with lowest cost
-    openSet.sort((a, b) => a.totalcost - b.totalcost);
-    let currentNode = openSet.shift();
+    openSet.sort((a, b) => b.totalcost - a.totalcost);
+    let currentNode = openSet.pop();
     if (food.x === currentNode.x && food.y === currentNode.y) {
       constructPath(currentNode);
       return;
@@ -162,9 +163,12 @@ function findpathAStar() {
     neigbours.forEach((currentNeighbor) => {
       // eslint-disable-next-line max-len
       if (!(closedSet.some((x) => x.x === currentNeighbor.x && x.y === currentNeighbor.y))) {
-        currentNeighbor.parent = currentNode;
-        currentNeighbor.totalcost = heuristic(currentNeighbor) + 1 + Number(currentNode.totalcost);
-        if (!(openSet.some((x) => x.x === currentNeighbor.x && x.y === currentNeighbor.y))) {
+        if (currentNeighbor.parent === undefined) {
+          currentNeighbor.parent = currentNode;
+          currentNeighbor.moveCost = currentNode.moveCost + 1;
+          currentNeighbor.totalcost = heuristic(currentNeighbor) + currentNeighbor.moveCost;
+        }
+        if (!(openSet.some((y) => y.x === currentNeighbor.x && y.y === currentNeighbor.y))) {
           openSet.push(currentNeighbor);
         }
       }
@@ -174,9 +178,9 @@ function findpathAStar() {
 }
 function moveSnake() {
   if (buffer.length === 0) {
+    // findpathBFS();
+    // findpathDFS();
     findpathAStar();
-    //findpathDFS
-    //findpathBFS
     return;
   }
   const newHead = buffer.pop();
@@ -189,7 +193,6 @@ function moveSnake() {
   }
   drawApple();
   drawSnake();
-  console.log(dead);
 }
 function mainLoop() {
   moveSnake();
