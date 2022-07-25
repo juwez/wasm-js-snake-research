@@ -48,8 +48,8 @@ void Pathfinder::AStar(int startX, int startY, int goalX, int goalY)
 	while(!openSet.empty())
 	{		
 		//choose the node in the open set w/ the lowest total cost
-		sort(openSet.begin(), openSet.end(), compare);
-		Node* current = openSet.back();
+		stable_sort(openSet.begin(), openSet.end(), compare);
+		Node* current = openSet.back();		
 
 		//don't do anymore pathfinding if we've found the goal!
 		if (checkGoal(current->getY(), current->getX(), goalY, goalX))
@@ -102,6 +102,7 @@ void Pathfinder::AStar(int startX, int startY, int goalX, int goalY)
 				//if neighbor is not in open set
 				if (!nodeInSet(openSet, currentNeighbor))
 				{
+					cout << ' ' << currentNeighbor->getX()<< ' '<<currentNeighbor->getY() << ' ' << endl;
 					openSet.push_back(currentNeighbor);
 				}
 			}
