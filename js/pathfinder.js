@@ -6,8 +6,8 @@ const c = document.getElementById('canvas');
 const ctx = c.getContext('2d');
 const width = 640;
 const height = 480;
-const numRows = 10; // 10 20 40;
-const numCols = 10; // 10 20 40;
+const numRows = 40; // 10 20 40;
+const numCols = 40; // 10 20 40;
 const cellWidth = width / numCols;
 const cellHeight = height / numRows;
 let food;
@@ -33,8 +33,8 @@ function createSnake() {
 }
 function placeFood() {
   food = {
-    x: 6, // Math.floor(Math.random() * numCols),
-    y: 4, // Math.floor(Math.random() * numRows),
+    x: Math.floor(Math.random() * numCols),
+    y: Math.floor(Math.random() * numRows),
   };
   if (isBlocked(food.x, food.y)) {
     placeFood();
@@ -92,18 +92,22 @@ function constructPath(node) {
 }
 
 function findpathBFS() {
+  const startTime = performance.now();
+  let nodes;
+  let time;
   let openSet = [snake[0]];
   let closedSet = [];
-  // get head of snake
   while (openSet.length > 0) {
     const currentNode = openSet.shift();
     if (food.x === currentNode.x && food.y === currentNode.y) {
+      const succesTime = performance.now();
       constructPath(currentNode);
-      return;
+      nodes = openSet.length + closedSet.length;
+      time = succesTime - startTime;
+      return { nodes, time };
     }
     const neigbours = getNeighboursBFS(currentNode);
     neigbours.forEach((currentNeighbor) => {
-      // can only contains it if we already proccessed it
       if (closedSet.some((x) => x.x === currentNeighbor.x && x.y === currentNeighbor.y)) {
         return;
       }
@@ -115,23 +119,29 @@ function findpathBFS() {
     closedSet.push(currentNode);
   }
   dead = true;
+  const failedTime = performance.now();
+  nodes = openSet.length + closedSet.length;
+  time = failedTime - startTime;
+  return (nodes, time);
 }
 function findpathDFS() {
+  const startTime = performance.now();
   const stack = [snake[0]];
   const discoveredSet = [];
   while (stack.length > 0) {
     const currentNode = stack.pop();
 
     if (food.x === currentNode.x && food.y === currentNode.y) {
-    // we found a path
+      const succesTime = performance.now();
       constructPath(currentNode);
-      return;
+      let nodes = discoveredSet.length;
+      let time = succesTime - startTime;
+      return { nodes, time };
     }
     if (!(discoveredSet.some((x) => x.x === currentNode.x && x.y === currentNode.y))) {
       discoveredSet.push(currentNode);
       const neigbours = getNeighboursBFS(currentNode);
       neigbours.forEach((currentNeighbor) => {
-        // can only contains it if we already proccessed it
         stack.push(currentNeighbor);
         if (currentNeighbor.parent === undefined) {
           currentNeighbor.parent = currentNode;
@@ -139,26 +149,35 @@ function findpathDFS() {
       });
     }
   }
+  const failedTime = performance.now();
   dead = true;
+  let nodes = discoveredSet.length;
+  let time = failedTime - startTime;
+  return { nodes, time };
 }
 function heuristic(node) {
   return (Math.abs(node.x - food.x) + Math.abs(node.y - food.y));
 }
 function findpathAStar() {
+  const startTime = performance.now();
   let openSet = [snake[0]];
   let closedSet = [];
   openSet[0].moveCost = 0;
   openSet[0].totalcost = heuristic(snake[0]) + openSet[0].moveCost;
 
   while (openSet.length > 0) {
-    // choose node with lowest cost
     openSet.sort((a, b) => b.totalcost - a.totalcost);
+    //pop and push here so if the node is the food its included in our node count
     let currentNode = openSet.pop();
-    if (food.x === currentNode.x && food.y === currentNode.y) {
-      constructPath(currentNode);
-      return;
-    }
     closedSet.push(currentNode);
+
+    if (food.x === currentNode.x && food.y === currentNode.y) {
+      const succesTime = performance.now();
+      constructPath(currentNode);
+      let nodes = closedSet.length + openSet.length;
+      let time = succesTime - startTime;
+      return { nodes, time };
+    }
     const neigbours = getNeighboursBFS(currentNode);
     neigbours.forEach((currentNeighbor) => {
       // eslint-disable-next-line max-len
@@ -174,13 +193,32 @@ function findpathAStar() {
       }
     });
   }
+  const failedTime = performance.now();
   dead = true;
+  let nodes = closedSet.length + openSet.length;
+  let time = failedTime - startTime;
+  return { nodes, time };
 }
 function moveSnake() {
+  let nodes; let time;
   if (buffer.length === 0) {
-    // findpathBFS();
-    // findpathDFS();
-    findpathAStar();
+    let data = findpathAStar();
+    // general logging point
+    // we only care about the state when path is just calculated
+
+    nodes = data.nodes;
+    time = data.time;
+    console.log(food.x);
+    console.log(food.y);
+    console.log(nodes);
+    console.log(time);
+    snake.forEach((snakePiece) => {
+      console.log(snakePiece.x, snakePiece.y);
+    });
+    console.log(snake.length);
+    if (dead) {
+      console.log('game over');
+    }
     return;
   }
   const newHead = buffer.pop();
@@ -206,13 +244,7 @@ function init() {
 
 function startGame() {
   init();
-  let gameLoop = setInterval(() => {
-    mainLoop();
-    if (dead) {
-      clearInterval(gameLoop);
-      startGame();
-    }
-  }, 50);
+  setInterval(mainLoop, 100);
 }
 
 startGame();
