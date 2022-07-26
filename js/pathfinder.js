@@ -103,7 +103,7 @@ function findpathBFS() {
       const succesTime = performance.now();
       constructPath(currentNode);
       nodes = openSet.length + closedSet.length;
-      time = succesTime - startTime;
+      time = Math.round(succesTime - startTime);
       return { nodes, time };
     }
     const neigbours = getNeighboursBFS(currentNode);
@@ -121,7 +121,7 @@ function findpathBFS() {
   dead = true;
   const failedTime = performance.now();
   nodes = openSet.length + closedSet.length;
-  time = failedTime - startTime;
+  time = Math.round(failedTime - startTime);
   return (nodes, time);
 }
 function findpathDFS() {
@@ -135,7 +135,7 @@ function findpathDFS() {
       const succesTime = performance.now();
       constructPath(currentNode);
       let nodes = discoveredSet.length;
-      let time = succesTime - startTime;
+      let time = Math.round(succesTime - startTime);
       return { nodes, time };
     }
     if (!(discoveredSet.some((x) => x.x === currentNode.x && x.y === currentNode.y))) {
@@ -152,7 +152,7 @@ function findpathDFS() {
   const failedTime = performance.now();
   dead = true;
   let nodes = discoveredSet.length;
-  let time = failedTime - startTime;
+  let time = Math.round(failedTime - startTime);
   return { nodes, time };
 }
 function heuristic(node) {
@@ -167,7 +167,7 @@ function findpathAStar() {
 
   while (openSet.length > 0) {
     openSet.sort((a, b) => b.totalcost - a.totalcost);
-    //pop and push here so if the node is the food its included in our node count
+    // pop and push here so if the node is the food its included in our node count
     let currentNode = openSet.pop();
     closedSet.push(currentNode);
 
@@ -175,7 +175,7 @@ function findpathAStar() {
       const succesTime = performance.now();
       constructPath(currentNode);
       let nodes = closedSet.length + openSet.length;
-      let time = succesTime - startTime;
+      let time = Math.round(succesTime - startTime);
       return { nodes, time };
     }
     const neigbours = getNeighboursBFS(currentNode);
@@ -196,7 +196,7 @@ function findpathAStar() {
   const failedTime = performance.now();
   dead = true;
   let nodes = closedSet.length + openSet.length;
-  let time = failedTime - startTime;
+  let time = Math.round(failedTime - startTime);
   return { nodes, time };
 }
 function moveSnake() {
@@ -208,14 +208,13 @@ function moveSnake() {
 
     nodes = data.nodes;
     time = data.time;
-    console.log(food.x);
-    console.log(food.y);
-    console.log(nodes);
-    console.log(time);
-    snake.forEach((snakePiece) => {
-      console.log(snakePiece.x, snakePiece.y);
-    });
-    console.log(snake.length);
+    console.log('snakeLength', snake.length);
+    console.log('startX', snake[0].x);
+    console.log('startY', snake[0].y);
+    console.log('foodX', food.x);
+    console.log('food.y', food.y);
+    console.log('nodeCount', nodes);
+    console.log('timeTaken', time);
     if (dead) {
       console.log('game over');
     }
