@@ -50,11 +50,6 @@ void main_loop(void)
 		snake->move();
 		snake->checkCollision();
 	}
-	else
-    {
-        cout << "Snake: game over! (size = " << snake->getSize() << ")" << endl;
-    }
- //   SDL_Delay(200);  
 }
 
 int main()

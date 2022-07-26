@@ -63,7 +63,6 @@ void Snake::checkCollision()
 		food->move( body);
 		pathfinder->resetPathFlag();
 		this->addSegment();
-		cout << "Snake: ate food (size = "  << body.size() << ")" << endl;
 	}
 	
 	//check for out of bounds
