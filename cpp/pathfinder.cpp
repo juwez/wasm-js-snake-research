@@ -1,6 +1,8 @@
 using namespace std;
 #include "pathfinder.h"
 #include "gamesettings.h"
+#include <chrono>
+
 
 bool compare(Node* lhs, Node* rhs)
 {
@@ -29,7 +31,8 @@ void Pathfinder::resetPathFlag()
 
 void Pathfinder::AStar(int startX, int startY, int goalX, int goalY)
 {
-    clock_t startTime = clock();
+	auto startTime = std::chrono::high_resolution_clock::now();
+
 	cout << "AStar: starting search from (" << startX << ", " << startY << ") to ("
 	     << goalX << ", " << goalY << ")" << endl; 
 	//fetch the most recent iteration of the game board
@@ -54,17 +57,16 @@ void Pathfinder::AStar(int startX, int startY, int goalX, int goalY)
 		//don't do anymore pathfinding if we've found the goal!
 		if (checkGoal(current->getY(), current->getX(), goalY, goalX))
 		{
-            clock_t finishTime = clock();
+            auto finishTime = std::chrono::high_resolution_clock::now();
+
 			cout << "AStar: goal node found! (nodes explored = "
 			     << openSet.size() + closedSet.size() << ")" << endl;
 
-            double searchTime = (double)((finishTime-startTime)*1000/(double)CLOCKS_PER_SEC);
-            timeStats.push_back(searchTime);
+		    auto searchTime = std::chrono::duration_cast<std::chrono::nanoseconds>(finishTime - startTime);
+
+            cout << "AStar: time taken = " << searchTime.count() << " ms "<< endl;
             
-            cout << "AStar: time taken = " << searchTime << " ms "<< endl;
-
-            nodeStats.push_back(openSet.size() + closedSet.size());
-
+            
 			currGameState.at(startY).at(startX)->setParent(nullptr); //shitty spaghet code 
 
 			cout << "done" << endl;
@@ -102,35 +104,28 @@ void Pathfinder::AStar(int startX, int startY, int goalX, int goalY)
 				//if neighbor is not in open set
 				if (!nodeInSet(openSet, currentNeighbor))
 				{
-					cout << ' ' << currentNeighbor->getX()<< ' '<<currentNeighbor->getY() << ' ' << endl;
 					openSet.push_back(currentNeighbor);
 				}
 			}
 		}
 	}
 
-    clock_t finishTime = clock();
+    auto finishTime = std::chrono::high_resolution_clock::now();
 	pathFound = false; //tell the game to keep pathfinding on each new frame
 	cout << "AStar: no path found! (nodes explored = " << openSet.size() + closedSet.size()
 	     << ")" << endl;
 
-    double searchTime = (double)((finishTime-startTime)*1000/(double)CLOCKS_PER_SEC);
+		    auto searchTime = std::chrono::duration_cast<std::chrono::nanoseconds>(finishTime - startTime);
             
-    cout << "AStar: time taken = " << searchTime << " ms "<< endl;
-    timeStats.push_back(searchTime);
+    cout << "AStar: time taken = " << searchTime.count() << " ms "<< endl;
     
-    nodeStats.push_back(openSet.size() + closedSet.size());
-	     
-	
-	//~ currGameState.at(startY).at(startX)->color(FL_MAGENTA);
-	
 	cout << "------------------------------" << endl;
 }
 
 
 void Pathfinder::BFS(int startX, int startY, int goalX, int goalY)
 {
-    clock_t startTime = clock();
+	auto startTime = std::chrono::high_resolution_clock::now();
     cout << "BFS: starting search from (" << startX << ", " << startY << ") to ("
      << goalX << ", " << goalY << ")" << endl; 
 	//fetch the most recent iteration of the game board
@@ -150,17 +145,14 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY)
 
         if (checkGoal(current->getY(), current->getX(), goalY, goalX))
         {
-            clock_t finishTime = clock();
+            auto finishTime = std::chrono::high_resolution_clock::now();
             cout << "BFS: goal node found! (nodes explored = "
 			     << openSet.size() + closedSet.size() << ")" << endl;
 
-            double searchTime = (double)((finishTime-startTime)*1000/(double)CLOCKS_PER_SEC);
+		    auto searchTime = std::chrono::duration_cast<std::chrono::nanoseconds>(finishTime - startTime);
             
-            cout << "BFS: time taken = " << searchTime << " ms "<< endl;
-            timeStats.push_back(searchTime);
+            cout << "BFS: time taken = " << searchTime.count() << " ms "<< endl;
             
-            nodeStats.push_back(openSet.size() + closedSet.size());
-
 			currGameState.at(startY).at(startX)->setParent(nullptr); //shitty spaghet code 
 
 			cout << "done" << endl;
@@ -194,17 +186,15 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY)
         }
         closedSet.push_back(current);
     }
-    clock_t finishTime = clock();
+    auto finishTime = std::chrono::high_resolution_clock::now();
     pathFound = false; //tell the game to keep pathfinding on each new frame
 	cout << "BFS: no path found! (nodes explored = " << openSet.size() + closedSet.size()
 	     << ")" << endl;
 
-    double searchTime = (double)((finishTime-startTime)*1000/(double)CLOCKS_PER_SEC);
+		    auto searchTime = std::chrono::duration_cast<std::chrono::nanoseconds>(finishTime - startTime);
             
-    cout << "BFS: time taken = " << searchTime << " ms "<< endl;
-    timeStats.push_back(searchTime);
-
-    nodeStats.push_back(openSet.size() + closedSet.size());
+    cout << "BFS: time taken = " << searchTime.count() << " ms "<< endl;
+    
     
 	cout << "done" << endl;
     
@@ -213,7 +203,7 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY)
 
 void Pathfinder::DFS(int startX, int startY, int goalX, int goalY)
 {
-    clock_t startTime = clock();
+	auto startTime = std::chrono::high_resolution_clock::now();
     cout << "DFS: starting search from (" << startX << ", " << startY << ") to ("
     << goalX << ", " << goalY << ")" << endl;
     
@@ -230,17 +220,15 @@ void Pathfinder::DFS(int startX, int startY, int goalX, int goalY)
 
         if (checkGoal(current->getY(), current->getX(), goalY, goalX))
         {
-            clock_t finishTime = clock();
+            auto finishTime = std::chrono::high_resolution_clock::now();
             cout << "DFS: goal node found! (nodes explored = "
 			     << discoveredSet.size() << ")" << endl;
 
-            double searchTime = (double)((finishTime-startTime)*1000/(double)CLOCKS_PER_SEC);
+		    auto searchTime = std::chrono::duration_cast<std::chrono::nanoseconds>(finishTime - startTime);
             
-            cout << "DFS: time taken = " << searchTime << " ms "<< endl;
-            timeStats.push_back(searchTime);
+            cout << "DFS: time taken = " << searchTime.count() << " ms "<< endl;
             
-            nodeStats.push_back(discoveredSet.size());
-
+			
 			currGameState.at(startY).at(startX)->setParent(nullptr); //shitty spaghet code 
 
 			cout << "done" << endl;
@@ -272,17 +260,15 @@ void Pathfinder::DFS(int startX, int startY, int goalX, int goalY)
         }
     }
 
-    clock_t finishTime = clock();
+    auto finishTime = std::chrono::high_resolution_clock::now();
     pathFound = false; //tell the game to keep pathfinding on each new frame
 	cout << "DFS: no path found! (nodes explored = " << discoveredSet.size()
 	     << ")" << endl;
 
-    double searchTime = (double)((finishTime-startTime)*1000/(double)CLOCKS_PER_SEC);
+		    auto searchTime = std::chrono::duration_cast<std::chrono::nanoseconds>(finishTime - startTime);
             
-    cout << "DFS: time taken = " << searchTime << " ms "<< endl;
-    timeStats.push_back(searchTime);
+    cout << "DFS: time taken = " << searchTime.count() << " ms "<< endl;
     
-    nodeStats.push_back(discoveredSet.size());
     
 	cout << "done" << endl;
     
@@ -416,8 +402,7 @@ vector<string> Pathfinder::buildPath(vector<vector<Node*>> gameState, Node* goal
 	}
 
     //add the current entry to the statistics vector
-    pathStats.push_back(pathLength);
-	return pathBuffer;
+    return pathBuffer;
 }
 
 void Pathfinder::setSnake(Snake* snake){ this->snake = snake; }
@@ -461,13 +446,6 @@ void Pathfinder::printGameState(vector<vector<Node*>> gameState)
 	}
 }
 
-void Pathfinder::printStats()
-{
-    cout << "----------STATS----------" << endl;
-    cout << "Average nodes explored: " << calcAvg(nodeStats) << " nodes" << endl;
-    cout << "Average path length: " << calcAvg(pathStats) << " nodes" << endl;
-    cout << "Average time taken: " << calcAvg(timeStats) << " ms" << endl;
-}
 
 bool Pathfinder::nodeInSet(vector<Node*> set, Node* node)
 {	//linearly search the argument set for the argument node

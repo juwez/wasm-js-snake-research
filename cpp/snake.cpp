@@ -2,6 +2,7 @@
 #include "food.h"
 #include "main.h"
 #include "gamesettings.h"
+#include <chrono>
 
 using namespace std;
 //fix init order

@@ -22,9 +22,6 @@ class Pathfinder
 		bool pathFound; 	//is a path found?
 		bool repeatSearch; 	//repeat on every frame?
 
-        std::vector<int> nodeStats; //contains nodes explored count for each search
-        std::vector<int> pathStats; //contains path length for each search
-        std::vector<double> timeStats; //contains path length for each search
         std::vector<std::vector<Node*>> gameState;
 
 	public:
@@ -37,8 +34,6 @@ class Pathfinder
 		void AStar(int startX, int startY, int goalX, int goalY); 
 		void BFS(int startX, int startY, int goalX, int goalY);
 		void DFS(int startX, int startY, int goalX, int goalY);
-
-        void printStats();
         
 		void printGameState(std::vector<std::vector<Node*>> gameState);
 		void resetPathFlag();
