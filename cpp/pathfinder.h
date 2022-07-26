@@ -1,58 +1,63 @@
 #pragma once
-#include <queue>
-#include <climits>
-#include <unistd.h>
-#include <vector>
+#include "node.h"
+#include "snake.h"
 #include <algorithm>
+#include <climits>
 #include <ctime>
 #include <numeric>
-#include "snake.h"
-#include "node.h"
+#include <queue>
+#include <unistd.h>
+#include <vector>
 
-//forward declarations
+// forward declarations
 class Snake;
 
-class Pathfinder
-{
-	private:
-		Snake* snake;
+class Pathfinder {
+private:
+  Snake *snake;
 
-		int numRows, numCols;	//grid size
+  int numRows, numCols; // grid size
 
-		bool pathFound; 	//is a path found?
-		bool repeatSearch; 	//repeat on every frame?
+  bool pathFound;    // is a path found?
+  bool repeatSearch; // repeat on every frame?
 
-        std::vector<std::vector<Node*>> gameState;
+  std::vector<std::vector<Node *>> gameState;
 
-	public:
-		Pathfinder(Snake* snake);
+public:
+  Pathfinder(Snake *snake);
 
-		
-		void setSnake(Snake* snake);
-		void setRepeatSearch(bool repeat);
-        
-		void AStar(int startX, int startY, int goalX, int goalY); 
-		void BFS(int startX, int startY, int goalX, int goalY);
-		void DFS(int startX, int startY, int goalX, int goalY);
-        
-		void printGameState(std::vector<std::vector<Node*>> gameState);
-		void resetPathFlag();
-		
-		std::vector<std::vector<Node*>> updateGameState();
-		std::vector<Node*> getNeighbors2(std::vector<std::vector<Node*>> gameState, Node* node);
-		std::vector<Node*> getNeighborsBFS(std::vector<std::vector<Node*>> gameState, Node* node);
+  void setSnake(Snake *snake);
+  void setRepeatSearch(bool repeat);
 
-        //logic checks 
-		bool checkBounds(int row, int col);     //is node out of bounds?
-		bool checkGoal(int row, int col, int goalRow, int goalCol); //is the node the goal?
-		bool checkBlocked(std::vector<std::vector<Node*>> gameState, int row, int col); //is the node within the snake?
-		bool checkPathFound();
-		bool checkRepeatSearch();
-		bool nodeInSet(std::vector<Node*>set, Node* node);  //performs a linear search for node in set
-		
-		//Walks the path created by A*, returns a buffer of directions
-		std::vector<std::string> buildPath(std::vector<std::vector<Node*>> gameState, Node* goal);
+  void AStar(int startX, int startY, int goalX, int goalY);
+  void BFS(int startX, int startY, int goalX, int goalY);
+  void DFS(int startX, int startY, int goalX, int goalY);
 
-        double calcAvg(std::vector<int> data);   //takes floating-point mean of an integer vector
-        double calcAvg(std::vector<double> data);   //takes floating-point mean of a double vector
+  void resetPathFlag();
+
+  std::vector<std::vector<Node *>> updateGameState();
+  std::vector<Node *> getNeighbors2(std::vector<std::vector<Node *>> gameState,
+                                    Node *node);
+  std::vector<Node *>
+  getNeighborsBFS(std::vector<std::vector<Node *>> gameState, Node *node);
+
+  // logic checks
+  bool checkBounds(int row, int col); // is node out of bounds?
+  bool checkGoal(int row, int col, int goalRow,
+                 int goalCol); // is the node the goal?
+  bool checkBlocked(std::vector<std::vector<Node *>> gameState, int row,
+                    int col); // is the node within the snake?
+  bool checkPathFound();
+  bool checkRepeatSearch();
+  bool nodeInSet(std::vector<Node *> set,
+                 Node *node); // performs a linear search for node in set
+
+  // Walks the path created by A*, returns a buffer of directions
+  std::vector<std::string> buildPath(std::vector<std::vector<Node *>> gameState,
+                                     Node *goal);
+
+  double calcAvg(
+      std::vector<int> data); // takes floating-point mean of an integer vector
+  double calcAvg(
+      std::vector<double> data); // takes floating-point mean of a double vector
 };

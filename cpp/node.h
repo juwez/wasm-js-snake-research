@@ -1,38 +1,36 @@
 
-class Node
-{
-	private:
-		//position on the board
-		int x, y;	
+class Node {
+private:
+  // position on the board
+  int x, y;
 
-		//movement cost and total (movement + heuristic)
-		int moveCost, totalCost;
+  // movement cost and total (movement + heuristic)
+  int moveCost, totalCost;
 
-		bool isObstacle;	//does the snake body occupy the current grid cell?
-		
-		Node* parent;	//reference to parent
+  bool isObstacle; // does the snake body occupy the current grid cell?
 
-	public:
-		//constructor(s)
-		Node(int x, int y);
+  Node *parent; // reference to parent
 
-		//getters & setters
-		int getX();
-		int getY();
-		int getMoveCost();
-		int getTotalCost();
-		
-		bool checkObstacle();
+public:
+  // constructor(s)
+  Node(int x, int y);
 
-		void setObstacle(bool obstacle);
-		void setMoveCost(int moveCost);
-		void setTotalCost(int totalCost);
-		void setParent(Node* parent);
-        void reset();
+  // getters & setters
+  int getX();
+  int getY();
+  int getMoveCost();
+  int getTotalCost();
 
-		int heuristic(int xGoal, int yGoal);
-		void updateTotalCost(int xGoal, int yGoal);
+  bool checkObstacle();
 
-		Node* getParent();
+  void setObstacle(bool obstacle);
+  void setMoveCost(int moveCost);
+  void setTotalCost(int totalCost);
+  void setParent(Node *parent);
+  void reset();
+
+  int heuristic(int xGoal, int yGoal);
+  void updateTotalCost(int xGoal, int yGoal);
+
+  Node *getParent();
 };
-

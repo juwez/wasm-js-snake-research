@@ -1,20 +1,18 @@
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
-#include "main.h"
-#include "snake.h"
 #include "food.h"
 #include "gamesettings.h"
+#include "main.h"
+#include "snake.h"
 #include <sstream>
 using namespace std;
 double timeInterval = 0.05;
-Snake* game;
-
-
+Snake *game;
 
 void quit(void);
 
@@ -24,66 +22,56 @@ SDL_Event e;
 
 bool running = false;
 
+bool init(void) {
+  bool success = true;
+  window = NULL;
+  renderer = NULL;
 
-bool init(void)
-{
-    bool success = true;
-    window = NULL;
-    renderer = NULL;
+  window = SDL_CreateWindow("snake game", SDL_WINDOWPOS_UNDEFINED,
+                            SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+                            SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    window = SDL_CreateWindow("snake game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+  running = true;
+  string algorithm = "AStar";
 
-    running = true;
-    string algorithm = "AStar";
+  game = new Snake(1, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, algorithm);
 
-    game = new Snake(1, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, algorithm);
-        
-    return success;
+  return success;
 }
 
-void main_loop(void)
-{
-    Snake* snake = static_cast<Snake*>(game);
-	if(!snake->checkDead())
-	{
-		snake->move();
-		snake->checkCollision();
-	}
+void main_loop(void) {
+  Snake *snake = static_cast<Snake *>(game);
+  if (!snake->checkDead()) {
+    snake->move();
+    snake->checkCollision();
+  }
 }
 
-int main()
-{
-    if(!init())
-        return -1;
-    else{
+int main() {
+  if (!init())
+    return -1;
+  else {
 
-        #ifdef __EMSCRIPTEN__
-            emscripten_set_main_loop(main_loop, 0, 1);
-        #endif
+#ifdef __EMSCRIPTEN__
+    emscripten_set_main_loop(main_loop, 0, 1);
+#endif
 
-        #ifndef __EMSCRIPTEN__
-            while(running)
-                main_loop();
-        #endif
-    }
-    
-    quit_game();
-    return 0;
+#ifndef __EMSCRIPTEN__
+    while (running)
+      main_loop();
+#endif
+  }
+
+  quit_game();
+  return 0;
 }
 
+void quit_game(void) {
 
-
-void quit_game(void)
-{
-
-    #ifdef __EMSCRIPTEN__
-        emscripten_cancel_main_loop();
-    #endif
+#ifdef __EMSCRIPTEN__
+  emscripten_cancel_main_loop();
+#endif
 }
 
-
-SDL_Renderer* getRenderer()
-{ 
-    return renderer; 
-}
+SDL_Renderer *getRenderer() { return renderer; }
