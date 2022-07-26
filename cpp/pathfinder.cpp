@@ -50,14 +50,13 @@ void Pathfinder::AStar(int startX, int startY, int goalX, int goalY) {
     // don't do anymore pathfinding if we've found the goal!
     if (checkGoal(current->getY(), current->getX(), goalY, goalX)) {
       auto finishTime = std::chrono::high_resolution_clock::now();
-      cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
       auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
           finishTime - startTime);
-      cout << "timeTaken " << searchTime.count() << endl;
+    cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
+	  cout << "timeTaken " << searchTime.count() << endl;
 
       currGameState.at(startY).at(startX)->setParent(
-          nullptr); // shitty spaghet code
-
+          nullptr); 
       // write path directly to snake's input buffer
       snake->buffer =
           buildPath(currGameState, currGameState.at(goalY).at(goalX));
@@ -91,11 +90,12 @@ void Pathfinder::AStar(int startX, int startY, int goalX, int goalY) {
   }
 
   auto finishTime = std::chrono::high_resolution_clock::now();
-  pathFound = false; // tell the game to keep pathfinding on each new frame
-  cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
   auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
       finishTime - startTime);
 
+  pathFound = false; // tell the game to keep pathfinding on each new frame
+  cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
+  
   cout << "timeTaken " << searchTime.count() << endl;
   cout << "dead" << endl;
 }
@@ -161,7 +161,7 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY) {
 }
 
 void Pathfinder::DFS(int startX, int startY, int goalX, int goalY) {
-  cout << snake->getSize() << endl;
+  cout << "snakeLength " << snake->getSize() << endl;
   cout << "start.x " << startX << endl;
   cout << "start.y " << startY << endl;
   cout << "food.x " << goalX << endl;
