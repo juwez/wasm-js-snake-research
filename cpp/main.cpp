@@ -32,7 +32,7 @@ bool init(void) {
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
   running = true;
-  string algorithm = "BFS";
+  string algorithm = "AStar";
 
   game = new Snake(1, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, algorithm);
 
