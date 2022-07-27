@@ -8,9 +8,9 @@ using namespace std;
 // fix init order
 Snake::Snake(int numSegments, int x, int y, int screenW, int screenH,
              string searchAlgorithm)
-    : startX(x), startY(y), maxBufferSize(1000), screenW(screenW),
-      screenH(screenH), searchAlgorithm(searchAlgorithm), direction("RIGHT"),
-      dead(false) {
+    : startX(x), startY(y), screenW(screenW), screenH(screenH),
+      maxBufferSize(1000), dead(false), direction("RIGHT"),
+      searchAlgorithm(searchAlgorithm) {
   // instantiate pathfinder
   pathfinder = new Pathfinder(this);
   srand(time(NULL));
@@ -26,7 +26,6 @@ Snake::Snake(int numSegments, int x, int y, int screenW, int screenH,
 bool Snake::checkDead() { return this->dead; }
 
 void Snake::addSegment() {
-  // get tail pos
   int tailX = body.back()->getX();
   int tailY = body.back()->getY();
 
@@ -70,8 +69,7 @@ void Snake::move() {
   int foodX = food->getX();
   int foodY = food->getY();
 
-  // only run A* if a valid path has not already been found
-  if (!pathfinder->checkPathFound() || pathfinder->checkRepeatSearch()) {
+  if (!pathfinder->checkPathFound()) {
     if (searchAlgorithm == "AStar")
       pathfinder->AStar(headX / CELL_WIDTH, headY / CELL_HEIGHT,
                         foodX / CELL_WIDTH, foodY / CELL_HEIGHT);

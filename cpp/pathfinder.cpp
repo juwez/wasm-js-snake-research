@@ -1,8 +1,7 @@
-using namespace std;
 #include "pathfinder.h"
 #include "gamesettings.h"
 #include <chrono>
-
+using namespace std;
 bool compare(Node *lhs, Node *rhs) {
   return (lhs->getTotalCost() > rhs->getTotalCost());
 }
@@ -23,10 +22,10 @@ void Pathfinder::resetPathFlag() { this->pathFound = false; }
 
 void Pathfinder::AStar(int startX, int startY, int goalX, int goalY) {
   cout << "snakeLength " << snake->getSize() << endl;
-  cout << "start.x " << startX << endl;
-  cout << "start.y " << startY << endl;
-  cout << "food.x " << goalX << endl;
-  cout << "food.y " << goalX << endl;
+  cout << "startX " << startX << endl;
+  cout << "startY " << startY << endl;
+  cout << "foodX " << goalX << endl;
+  cout << "foodY " << goalX << endl;
 
   auto startTime = std::chrono::high_resolution_clock::now();
   // fetch the most recent iteration of the game board
@@ -52,11 +51,10 @@ void Pathfinder::AStar(int startX, int startY, int goalX, int goalY) {
       auto finishTime = std::chrono::high_resolution_clock::now();
       auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
           finishTime - startTime);
-    cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
-	  cout << "timeTaken " << searchTime.count() << endl;
+      cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
+      cout << "timeTaken " << searchTime.count() << endl;
 
-      currGameState.at(startY).at(startX)->setParent(
-          nullptr); 
+      currGameState.at(startY).at(startX)->setParent(nullptr);
       // write path directly to snake's input buffer
       snake->buffer =
           buildPath(currGameState, currGameState.at(goalY).at(goalX));
@@ -93,19 +91,18 @@ void Pathfinder::AStar(int startX, int startY, int goalX, int goalY) {
   auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
       finishTime - startTime);
 
-  pathFound = false; // tell the game to keep pathfinding on each new frame
   cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
-  
+
   cout << "timeTaken " << searchTime.count() << endl;
   cout << "dead" << endl;
 }
 
 void Pathfinder::BFS(int startX, int startY, int goalX, int goalY) {
   cout << "snakeLength " << snake->getSize() << endl;
-  cout << "start.x " << startX << endl;
-  cout << "start.y " << startY << endl;
-  cout << "food.x " << goalX << endl;
-  cout << "food.y " << goalX << endl;
+  cout << "startX " << startX << endl;
+  cout << "startY " << startY << endl;
+  cout << "foodX " << goalX << endl;
+  cout << "foodY " << goalX << endl;
   auto startTime = std::chrono::high_resolution_clock::now();
   // fetch the most recent iteration of the game board
   vector<vector<Node *>> currGameState = updateGameState();
@@ -120,8 +117,10 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY) {
   while (!openSet.empty()) {
     Node *current = openSet.front();
     openSet.erase(openSet.begin());
-
+    // cout << current->getX() << current->getY() << endl;
     if (checkGoal(current->getY(), current->getX(), goalY, goalX)) {
+      cout << "nodes " << openSet.size() << " " << closedSet.size() << endl;
+
       auto finishTime = std::chrono::high_resolution_clock::now();
       auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
           finishTime - startTime);
@@ -152,7 +151,6 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY) {
     closedSet.push_back(current);
   }
   auto finishTime = std::chrono::high_resolution_clock::now();
-  pathFound = false; // tell the game to keep pathfinding on each new frame
   auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
       finishTime - startTime);
   cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
@@ -162,10 +160,10 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY) {
 
 void Pathfinder::DFS(int startX, int startY, int goalX, int goalY) {
   cout << "snakeLength " << snake->getSize() << endl;
-  cout << "start.x " << startX << endl;
-  cout << "start.y " << startY << endl;
-  cout << "food.x " << goalX << endl;
-  cout << "food.y " << goalX << endl;
+  cout << "startX " << startX << endl;
+  cout << "startY " << startY << endl;
+  cout << "foodX " << goalX << endl;
+  cout << "foodY " << goalX << endl;
   auto startTime = std::chrono::high_resolution_clock::now();
 
   vector<vector<Node *>> currGameState = updateGameState();
@@ -209,7 +207,6 @@ void Pathfinder::DFS(int startX, int startY, int goalX, int goalY) {
   }
 
   auto finishTime = std::chrono::high_resolution_clock::now();
-  pathFound = false; // tell the game to keep pathfinding on each new frame
   cout << "nodeCount " << discoveredSet.size() << endl;
 
   auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -295,7 +292,6 @@ vector<string> Pathfinder::buildPath(vector<vector<Node *>> gameState,
   // Start from goal node, move backwards to start
   vector<string> pathBuffer;
   Node *current = goal;
-  int pathLength = 0;
 
   while (current != nullptr) {
     Node *currentParent = current->getParent();
@@ -317,8 +313,6 @@ vector<string> Pathfinder::buildPath(vector<vector<Node *>> gameState,
     } else {
       pathBuffer.push_back("DOWN");
     }
-
-    pathLength++;
 
     // traverse the path by moving to the next successor node
     current = currentParent;
@@ -360,9 +354,6 @@ bool Pathfinder::nodeInSet(
   }
   return false;
 }
-
-void Pathfinder::setRepeatSearch(bool repeat) { this->repeatSearch = repeat; }
-bool Pathfinder::checkRepeatSearch() { return this->repeatSearch; }
 
 bool Pathfinder::checkPathFound() { return this->pathFound; }
 

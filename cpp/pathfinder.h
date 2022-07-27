@@ -18,8 +18,7 @@ private:
 
   int numRows, numCols; // grid size
 
-  bool pathFound;    // is a path found?
-  bool repeatSearch; // repeat on every frame?
+  bool pathFound; // is a path found?
 
   std::vector<std::vector<Node *>> gameState;
 
@@ -27,7 +26,6 @@ public:
   Pathfinder(Snake *snake);
 
   void setSnake(Snake *snake);
-  void setRepeatSearch(bool repeat);
 
   void AStar(int startX, int startY, int goalX, int goalY);
   void BFS(int startX, int startY, int goalX, int goalY);
@@ -48,7 +46,6 @@ public:
   bool checkBlocked(std::vector<std::vector<Node *>> gameState, int row,
                     int col); // is the node within the snake?
   bool checkPathFound();
-  bool checkRepeatSearch();
   bool nodeInSet(std::vector<Node *> set,
                  Node *node); // performs a linear search for node in set
 
