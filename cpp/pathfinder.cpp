@@ -25,7 +25,7 @@ void Pathfinder::AStar(int startX, int startY, int goalX, int goalY) {
   cout << "startX " << startX << endl;
   cout << "startY " << startY << endl;
   cout << "foodX " << goalX << endl;
-  cout << "foodY " << goalX << endl;
+  cout << "foodY " << goalY << endl;
 
   auto startTime = std::chrono::high_resolution_clock::now();
   // fetch the most recent iteration of the game board
@@ -102,7 +102,7 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY) {
   cout << "startX " << startX << endl;
   cout << "startY " << startY << endl;
   cout << "foodX " << goalX << endl;
-  cout << "foodY " << goalX << endl;
+  cout << "foodY " << goalY << endl;
   auto startTime = std::chrono::high_resolution_clock::now();
   // fetch the most recent iteration of the game board
   vector<vector<Node *>> currGameState = updateGameState();
@@ -117,7 +117,6 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY) {
   while (!openSet.empty()) {
     Node *current = openSet.front();
     openSet.erase(openSet.begin());
-    // cout << current->getX() << current->getY() << endl;
     if (checkGoal(current->getY(), current->getX(), goalY, goalX)) {
       cout << "nodes " << openSet.size() << " " << closedSet.size() << endl;
 
@@ -163,7 +162,7 @@ void Pathfinder::DFS(int startX, int startY, int goalX, int goalY) {
   cout << "startX " << startX << endl;
   cout << "startY " << startY << endl;
   cout << "foodX " << goalX << endl;
-  cout << "foodY " << goalX << endl;
+  cout << "foodY " << goalY << endl;
   auto startTime = std::chrono::high_resolution_clock::now();
 
   vector<vector<Node *>> currGameState = updateGameState();

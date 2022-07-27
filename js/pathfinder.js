@@ -36,6 +36,7 @@ function placeFood() {
     x: Math.floor(Math.random() * numCols),
     y: Math.floor(Math.random() * numRows),
   };
+
   if (isBlocked(food.x, food.y)) {
     placeFood();
   }
@@ -212,7 +213,7 @@ function moveSnake() {
     console.log('startX', snake[0].x);
     console.log('startY', snake[0].y);
     console.log('foodX', food.x);
-    console.log('food.y', food.y);
+    console.log('foodY', food.y);
     console.log('nodeCount', nodes);
     console.log('timeTaken', time);
     if (dead) {
@@ -243,7 +244,7 @@ function init() {
 
 function startGame() {
   init();
-  setInterval(mainLoop, 100);
+  setInterval(mainLoop, 5);
 }
 
 startGame();
