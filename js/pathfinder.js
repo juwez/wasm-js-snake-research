@@ -6,14 +6,15 @@ const c = document.getElementById('canvas');
 const ctx = c.getContext('2d');
 const width = 640;
 const height = 480;
-const numRows = 40; // 10 20 40;
-const numCols = 40; // 10 20 40;
+const numRows = 10; // 10 20 40;
+const numCols = 10; // 10 20 40;
 const cellWidth = width / numCols;
 const cellHeight = height / numRows;
 let food;
 let snake = [];
 const buffer = [];
 let dead = false;
+let interval;
 
 function drawApple() {
   ctx.fillStyle = 'red';// make apple red
@@ -119,11 +120,11 @@ function findpathBFS() {
     });
     closedSet.push(currentNode);
   }
-  dead = true;
   const failedTime = performance.now();
+  dead = true;
   nodes = openSet.length + closedSet.length;
   time = Math.round((failedTime - startTime) * 1000);
-  return (nodes, time);
+  return {nodes, time};
 }
 function findpathDFS() {
   const startTime = performance.now();
@@ -198,14 +199,13 @@ function findpathAStar() {
   const failedTime = performance.now();
   dead = true;
   let nodes = closedSet.length + openSet.length;
-
   let time = Math.round((failedTime - startTime) * 1000);
   return { nodes, time };
 }
 function moveSnake() {
   let nodes; let time;
   if (buffer.length === 0) {
-    let data = findpathAStar();
+    let data = findpathBFS();
     // general logging point
     // we only care about the state when path is just calculated
 
@@ -220,6 +220,7 @@ function moveSnake() {
     console.log('timeTaken', time);
     if (dead) {
       console.log('game over');
+      clearInterval(interval);
     }
     return;
   }
@@ -246,7 +247,7 @@ function init() {
 
 function startGame() {
   init();
-  setInterval(mainLoop, 5);
+  interval = setInterval(mainLoop, 5);
 }
 
-startGame();
+setTimeout(startGame ,1000);
