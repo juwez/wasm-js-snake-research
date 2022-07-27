@@ -48,6 +48,7 @@ void main_loop(void) {
 }
 
 int main() {
+  SDL_Delay(1000);
   if (!init())
     return -1;
   else {

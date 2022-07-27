@@ -94,7 +94,7 @@ void Pathfinder::AStar(int startX, int startY, int goalX, int goalY) {
   cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
 
   cout << "timeTaken " << searchTime.count() << endl;
-  cout << "dead" << endl;
+  cout << "game over" << endl;
 }
 
 void Pathfinder::BFS(int startX, int startY, int goalX, int goalY) {
@@ -154,7 +154,7 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY) {
       finishTime - startTime);
   cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
   cout << "timeTaken " << searchTime.count() << endl;
-  cout << "gameOver" << endl;
+  cout << "game over" << endl;
 }
 
 void Pathfinder::DFS(int startX, int startY, int goalX, int goalY) {
@@ -212,7 +212,7 @@ void Pathfinder::DFS(int startX, int startY, int goalX, int goalY) {
       finishTime - startTime);
 
   cout << "timeTaken " << searchTime.count() << endl;
-  cout << "dead" << endl;
+  cout << "game over" << endl;
 }
 
 vector<Node *> Pathfinder::getNeighbors2(vector<vector<Node *>> gameState,
