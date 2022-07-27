@@ -5,7 +5,6 @@
 #include <chrono>
 
 using namespace std;
-// fix init order
 Snake::Snake(int numSegments, int x, int y, int screenW, int screenH,
              string searchAlgorithm)
     : startX(x), startY(y), screenW(screenW), screenH(screenH),

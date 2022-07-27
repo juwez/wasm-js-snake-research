@@ -6,8 +6,8 @@ const c = document.getElementById('canvas');
 const ctx = c.getContext('2d');
 const width = 640;
 const height = 480;
-const numRows = 10; // 10 20 40;
-const numCols = 10; // 10 20 40;
+const numRows = 25;
+const numCols = 25;
 const cellWidth = width / numCols;
 const cellHeight = height / numRows;
 let food;
@@ -34,8 +34,8 @@ function createSnake() {
 }
 function placeFood() {
   food = {
-    x: Math.floor(Math.random() * numCols),
-    y: Math.floor(Math.random() * numRows),
+    x:17,// Math.floor(Math.random() * numCols),
+    y:22,// Math.floor(Math.random() * numRows),
   };
 
   if (isBlocked(food.x, food.y)) {
@@ -205,7 +205,7 @@ function findpathAStar() {
 function moveSnake() {
   let nodes; let time;
   if (buffer.length === 0) {
-    let data = findpathBFS();
+    let data = findpathAStar();
     // general logging point
     // we only care about the state when path is just calculated
 

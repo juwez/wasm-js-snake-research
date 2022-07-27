@@ -5,3 +5,4 @@ node_modules
 .eslintrc.yml
 cpp/app.js
 cpp/app.wasm
+.trunk
