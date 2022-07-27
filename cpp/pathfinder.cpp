@@ -49,7 +49,7 @@ void Pathfinder::AStar(int startX, int startY, int goalX, int goalY) {
     // don't do anymore pathfinding if we've found the goal!
     if (checkGoal(current->getY(), current->getX(), goalY, goalX)) {
       auto finishTime = std::chrono::high_resolution_clock::now();
-      auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+      auto searchTime = std::chrono::duration_cast<std::chrono::microseconds>(
           finishTime - startTime);
       cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
       cout << "timeTaken " << searchTime.count() << endl;
@@ -88,7 +88,7 @@ void Pathfinder::AStar(int startX, int startY, int goalX, int goalY) {
   }
 
   auto finishTime = std::chrono::high_resolution_clock::now();
-  auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+  auto searchTime = std::chrono::duration_cast<std::chrono::microseconds>(
       finishTime - startTime);
 
   cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
@@ -121,7 +121,7 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY) {
       cout << "nodes " << openSet.size() << " " << closedSet.size() << endl;
 
       auto finishTime = std::chrono::high_resolution_clock::now();
-      auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+      auto searchTime = std::chrono::duration_cast<std::chrono::microseconds>(
           finishTime - startTime);
       cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
       cout << "timeTaken " << searchTime.count() << endl;
@@ -150,7 +150,7 @@ void Pathfinder::BFS(int startX, int startY, int goalX, int goalY) {
     closedSet.push_back(current);
   }
   auto finishTime = std::chrono::high_resolution_clock::now();
-  auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+  auto searchTime = std::chrono::duration_cast<std::chrono::microseconds>(
       finishTime - startTime);
   cout << "nodeCount " << openSet.size() + closedSet.size() << endl;
   cout << "timeTaken " << searchTime.count() << endl;
@@ -177,7 +177,7 @@ void Pathfinder::DFS(int startX, int startY, int goalX, int goalY) {
 
     if (checkGoal(current->getY(), current->getX(), goalY, goalX)) {
       auto finishTime = std::chrono::high_resolution_clock::now();
-      auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+      auto searchTime = std::chrono::duration_cast<std::chrono::microseconds>(
           finishTime - startTime);
       cout << "nodeCount " << discoveredSet.size() << endl;
       cout << "timeTaken " << searchTime.count() << endl;
@@ -208,7 +208,7 @@ void Pathfinder::DFS(int startX, int startY, int goalX, int goalY) {
   auto finishTime = std::chrono::high_resolution_clock::now();
   cout << "nodeCount " << discoveredSet.size() << endl;
 
-  auto searchTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+  auto searchTime = std::chrono::duration_cast<std::chrono::microseconds>(
       finishTime - startTime);
 
   cout << "timeTaken " << searchTime.count() << endl;

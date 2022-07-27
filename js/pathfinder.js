@@ -104,7 +104,7 @@ function findpathBFS() {
       const succesTime = performance.now();
       constructPath(currentNode);
       nodes = openSet.length + closedSet.length;
-      time = Math.round(succesTime - startTime);
+      time = Math.round((succesTime - startTime) * 1000);
       return { nodes, time };
     }
     const neigbours = getNeighboursBFS(currentNode);
@@ -122,7 +122,7 @@ function findpathBFS() {
   dead = true;
   const failedTime = performance.now();
   nodes = openSet.length + closedSet.length;
-  time = Math.round(failedTime - startTime);
+  time = Math.round((failedTime - startTime) * 1000);
   return (nodes, time);
 }
 function findpathDFS() {
@@ -136,7 +136,7 @@ function findpathDFS() {
       const succesTime = performance.now();
       constructPath(currentNode);
       let nodes = discoveredSet.length;
-      let time = Math.round(succesTime - startTime);
+      let time = Math.round((succesTime - startTime) * 1000);
       return { nodes, time };
     }
     if (!(discoveredSet.some((x) => x.x === currentNode.x && x.y === currentNode.y))) {
@@ -153,7 +153,7 @@ function findpathDFS() {
   const failedTime = performance.now();
   dead = true;
   let nodes = discoveredSet.length;
-  let time = Math.round(failedTime - startTime);
+  let time = Math.round((failedTime - startTime) * 1000);
   return { nodes, time };
 }
 function heuristic(node) {
@@ -176,7 +176,8 @@ function findpathAStar() {
       const succesTime = performance.now();
       constructPath(currentNode);
       let nodes = closedSet.length + openSet.length;
-      let time = Math.round(succesTime - startTime);
+
+      let time = Math.round((succesTime - startTime) * 1000);
       return { nodes, time };
     }
     const neigbours = getNeighboursBFS(currentNode);
@@ -197,7 +198,8 @@ function findpathAStar() {
   const failedTime = performance.now();
   dead = true;
   let nodes = closedSet.length + openSet.length;
-  let time = Math.round(failedTime - startTime);
+
+  let time = Math.round((failedTime - startTime) * 1000);
   return { nodes, time };
 }
 function moveSnake() {
